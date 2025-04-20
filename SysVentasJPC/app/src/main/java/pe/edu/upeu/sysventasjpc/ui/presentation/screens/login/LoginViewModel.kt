@@ -22,7 +22,6 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val userRepo: UsuarioRepository
 ) : ViewModel(){
-
     private val _isLoading: MutableLiveData<Boolean> by lazy {MutableLiveData<Boolean>(false)}
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -40,12 +39,13 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.postValue(true)
         try {
-
-            val usuario=userRepo.loginUsuario(toData).body()
             _islogin.postValue(false)
+            val totek=userRepo.loginUsuario(toData).body()
             delay(1500L)
-            TokenUtils.TOKEN_CONTENT="Bearer "+usuario?.token
-            listUser.postValue(usuario!!)
+            TokenUtils.TOKEN_CONTENT="Bearer "+totek?.token
+            Log.i("DATAXDMP", "Holas")
+            listUser.postValue(totek!!)
+            Log.i("DATAXDMP", TokenUtils.TOKEN_CONTENT)
             if(TokenUtils.TOKEN_CONTENT!="Bearer null"){
                 TokenUtils.USER_LOGIN=toData.user
                 _islogin.postValue(true)

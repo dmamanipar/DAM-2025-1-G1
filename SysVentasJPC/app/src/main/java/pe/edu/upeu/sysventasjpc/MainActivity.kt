@@ -8,15 +8,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -62,50 +61,30 @@ class MainActivity : ComponentActivity() {
                 ThemeType.PURPLE->{if (darkTheme.value)
                     DarkPurpleColors
                 else LightPurpleColors}
-                ThemeType.RED->{if (darkTheme.value) DarkRedColors
-                else
-                    LightRedColors}
+                ThemeType.RED->{if (darkTheme.value) DarkRedColors else LightRedColors}
                 ThemeType.GREEN->{if (darkTheme.value)
-                    DarkGreenColors
-                else LightGreenColors}
+                    DarkGreenColors else LightGreenColors}
                 else->{LightRedColors}
             }
+
+
             TokenUtils.CONTEXTO_APPX=this@MainActivity
+
             SysVentasJPCTheme(colorScheme = colorScheme) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-//Greeting("Android")
-                    val navController= rememberNavController()
-                    MainScreen(navController, darkMode = darkTheme,
-                        themeType=themeType)
-                }
-                /*Scaffold(modifier = Modifier.fillMaxSize()) {
-                innerPadding ->
-                Greeting(
-                name = "Android",
-                modifier = Modifier.padding(innerPadding)
-                )
+
+                val navController= rememberNavController()
+                MainScreen(navController, darkMode = darkTheme, themeType=themeType)
+
+
+                /*Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }*/
+
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SysVentasJPCTheme(colorScheme = DarkGreenColors) {
-        Greeting("Android")
     }
 }
 
@@ -116,7 +95,7 @@ fun MainScreen(
     darkMode: MutableState<Boolean>,
     themeType: MutableState<ThemeType>
 ) {
-    val drawerState = rememberDrawerState(initialValue =DrawerValue.Closed)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val openDialog = remember { mutableStateOf(false) }
     val navigationItems = listOf(
@@ -125,13 +104,14 @@ fun MainScreen(
         Destinations.Pantalla3,
         Destinations.Pantalla4,
         Destinations.Pantalla5,
+        Destinations.ProductoMainSC,
     )
     val navigationItems2 = listOf(
         Destinations.Pantalla1,
         Destinations.Pantalla2,
         Destinations.Pantalla3,
     )
-    val currentNavBackStackEntry by  navController.currentBackStackEntryAsState()
+    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute =
         currentNavBackStackEntry?.destination?.route ?:
         Destinations.Pantalla1.route
@@ -145,7 +125,7 @@ fun MainScreen(
                     navigationItems)
         },
         drawerState = drawerState) {
-        val snackbarHostState = remember {SnackbarHostState() }
+        val snackbarHostState = remember { SnackbarHostState() }
         val snackbarMessage = "Succeed!"
         val showSnackbar = remember { mutableStateOf(false) }
         val context = LocalContext.current
@@ -191,9 +171,28 @@ fun MainScreen(
             navController)
             }}*/
         ) {
-            NavigationHost(navController, darkMode, modif= it)
+            NavigationHost(navController, darkMode, modif= it
+            )
         }
     }
     Dialog(showDialog = openDialog.value, dismissDialog = {
         openDialog.value = false })
+}
+
+
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    SysVentasJPCTheme(colorScheme = DarkGreenColors)  {
+        Greeting("Android")
+    }
 }
