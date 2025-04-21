@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "731230081415",
+    "project_id": "loginfire-2b5f7",
+    "storage_bucket": "loginfire-2b5f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731230081415:android:16cccbb053469327bcc322",
+        "android_client_info": {
+          "package_name": "pe.edu.upeu.logingooglefirex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731230081415-02p7drdtglqnp1jblm4nh1o7og0mru29.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.edu.upeu.logingooglefirex",
+            "certificate_hash": "2409f0662a04f08c6f10677b4ba7fd67761f33b6"
+          }
+        },
+        {
+          "client_id": "731230081415-sevabljds0ldeb8fo3und0c3m5bfau0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9uWJB6qrEjq9He7v-plHsqjJACn32LDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731230081415-sevabljds0ldeb8fo3und0c3m5bfau0m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
