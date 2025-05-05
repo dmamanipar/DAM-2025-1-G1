@@ -24,12 +24,20 @@ sealed class Destinations(
     object Pantalla5 : Destinations("pantalla5", "Pantalla 5x", Icons.Filled.AccountCircle )
 
     object ProductoMainSC: Destinations("productomain","Adm. Productos", Icons.Filled.DateRange)
-        object ProductoFormSC:
+    object ProductoFormSC:
             Destinations("productoForm?prodId={prodId}", "Form Producto",
                 Icons.Filled.Add){
             fun passId(prodId:String?):String{
                 return "productoForm?prodId=$prodId"
             }
-        }
+    }
 
+    object MarcaMainSC: Destinations("marcamain","Adm. Marca", Icons.Filled.DateRange)
+    object MarcaFormSC: Destinations("marcaForm?marcId={marcId}",
+        "Form Marca",
+        Icons.Filled.Add){
+        fun passId(marcId:String?):String{
+            return "marcaForm?marcId=$marcId"
+        }
+    }
 }

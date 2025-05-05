@@ -1,5 +1,6 @@
 package pe.edu.upeu.sysventasjpc.repository
 
+import android.util.Log
 import pe.edu.upeu.sysventasjpc.data.remote.RestProducto
 import pe.edu.upeu.sysventasjpc.modelo.ProductoDto
 import pe.edu.upeu.sysventasjpc.modelo.ProductoResp
@@ -27,11 +28,15 @@ class ProductoRepositoryImp @Inject constructor(
                 "true"
     }
     override suspend fun reportarProductos(): List<ProductoResp> {
-        val response =
-            restProducto.reportarProducto(TokenUtils.TOKEN_CONTENT)
-        return if (response.isSuccessful) response.body() ?: emptyList()
-        else emptyList()
+        try {
+            val response =restProducto.reportarProducto(TokenUtils.TOKEN_CONTENT)
+            return response.body()!!
+        }catch (e:Exception){
+            Log.e("ERROR", "Error: ${e.message}")
+           return emptyList()
+        }
     }
+
     override suspend fun buscarProductoId(id: Long): ProductoResp {
         val response =
             restProducto.getProductoId(TokenUtils.TOKEN_CONTENT, id)
