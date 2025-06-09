@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:animated_floating_buttons/animated_floating_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sysventas/apis/producto_api.dart';
 import 'package:sysventas/bloc/producto/producto_bloc.dart';
 import 'package:sysventas/comp/TabItem.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +15,8 @@ import 'package:sysventas/repository/ProductoRepository.dart';
 import 'package:sysventas/repository/UnidadMedidaRepository.dart';
 import 'package:sysventas/theme/AppTheme.dart';
 import 'package:sysventas/ui/producto/producto_edit.dart';
-import 'package:sysventas/ui/producto/producto_form.dart';
+import 'package:sysventas/ui/productob/producto_edit.dart';
 import 'package:sysventas/ui/productob/producto_form.dart';
-import 'package:sysventas/util/TokenUtil.dart';
 import '../help_screen.dart';
 import 'package:excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
@@ -289,7 +287,7 @@ class _ProductoUIState extends State<ProductoUI> {
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
-                                                                        ProductoFormEdit(
+                                                                        ProductoFormEditB(
                                                                             modelA:productox)
                                                                 ),
                                                               ).then(onGoBack);
