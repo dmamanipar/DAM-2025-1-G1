@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sysventas/apis/categoria_api.dart';
 import 'package:sysventas/apis/marca_api.dart';
 import 'package:sysventas/apis/producto_api.dart';
 import 'package:sysventas/apis/unidadmedida_api.dart';
+import 'package:sysventas/bloc/producto/producto_bloc.dart';
 import 'package:sysventas/modelo/CategoriaModelo.dart';
 import 'package:sysventas/modelo/MarcaModelo.dart';
 import 'package:sysventas/modelo/ProductoModelo.dart';
@@ -39,118 +41,104 @@ class _ProductoFormState extends State<ProductoFormB> {
   @override
   void initState(){
     super.initState();
-    _loanData();
+    BlocProvider.of<ProductoBloc>(context).add(CreateProductoFormEvent());
   }
 
-  void _loanData() async {
-    try {
-      final apim = Provider.of<MarcaApi>(context, listen: false);
-      final resultM = await apim.getMarca(TokenUtil.TOKEN);
-
-      final apic = Provider.of<CategoriaApi>(context, listen: false);
-      final resultC = await apic.getCategoria(TokenUtil.TOKEN);
-
-      final apiu = Provider.of<UnidadmedidaApi>(context, listen: false);
-      final resultU = await apiu.getUnidadMedida(TokenUtil.TOKEN);
-      setState(() {
-        marcas = resultM;
-        categorias=resultC;
-        unidades=resultU;
-      });
-    } catch (e) {
-      print('Error al cargar marcas, categoria o unidad medida: $e');
-    }
-  }
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrar Producto')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: nombreController,
-                decoration: const InputDecoration(labelText: 'Nombre'),
-                validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
+      appBar: AppBar(title: const Text('Registrar ProductB')),
+      body: BlocBuilder<ProductoBloc, ProductoState>(builder: (context, state){
+        if(state is ProductoLoadedFormState){
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  TextFormField(
+                    controller: nombreController,
+                    decoration: const InputDecoration(labelText: 'Nombre'),
+                    validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
+                  ),
+                  TextFormField(
+                    controller: puController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Precio Unitario (pu)'),
+                    validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
+                  ),
+                  TextFormField(
+                    controller: puOldController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Precio Anterior (puOld)'),
+                  ),
+                  TextFormField(
+                    controller: utilidadController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Utilidad'),
+                  ),
+                  TextFormField(
+                    controller: stockController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Stock Actual'),
+                  ),
+                  TextFormField(
+                    controller: stockOldController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Stock Anterior'),
+                  ),
+                  DropdownButtonFormField<Categoria>(
+                    value: selectedCategoria,
+                    items: state.categoriaList.map((cat) {
+                      return DropdownMenuItem(value: cat, child: Text(cat.nombre));
+                    }).toList(),
+                    onChanged: (value) => setState(() => selectedCategoria = value),
+                    decoration: const InputDecoration(labelText: 'Categoría'),
+                    validator: (value) => value == null ? 'Seleccione una categoría' : null,
+                  ),
+                  DropdownButtonFormField<Marca>(
+                    value: selectedMarca,
+                    items: state.marcaList.map((mar) {
+                      return DropdownMenuItem(value: mar, child: Text(mar.nombre));
+                    }).toList(),
+                    onChanged: (value) => setState(() => selectedMarca = value),
+                    decoration: const InputDecoration(labelText: 'Marca'),
+                    validator: (value) => value == null ? 'Seleccione una marca' : null,
+                  ),
+                  DropdownButtonFormField<UnidadMedida>(
+                    value: selectedUnidad,
+                    items: state.unidadMedidaList.map((um) {
+                      return DropdownMenuItem(value: um, child: Text(um.nombreMedida));
+                    }).toList(),
+                    onChanged: (value) => setState(() => selectedUnidad = value),
+                    decoration: const InputDecoration(labelText: 'Unidad de Medida'),
+                    validator: (value) => value == null ? 'Seleccione una unidad' : null,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: (){
+                          BlocProvider.of<ProductoBloc>(context).add(ListarProductoEvent());
+                          Navigator.pop(context, true);
+                        },
+                        child: const Text('Cancelar'),
+                      ),
+                      ElevatedButton(
+                        onPressed: _registrarProducto,
+                        child: const Text('Guardar'),
+                      )
+                    ],
+                  )
+                ],
               ),
-              TextFormField(
-                controller: puController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Precio Unitario (pu)'),
-                validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
-              ),
-              TextFormField(
-                controller: puOldController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Precio Anterior (puOld)'),
-              ),
-              TextFormField(
-                controller: utilidadController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Utilidad'),
-              ),
-              TextFormField(
-                controller: stockController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Stock Actual'),
-              ),
-              TextFormField(
-                controller: stockOldController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Stock Anterior'),
-              ),
-              DropdownButtonFormField<Categoria>(
-                value: selectedCategoria,
-                items: categorias.map((cat) {
-                  return DropdownMenuItem(value: cat, child: Text(cat.nombre));
-                }).toList(),
-                onChanged: (value) => setState(() => selectedCategoria = value),
-                decoration: const InputDecoration(labelText: 'Categoría'),
-                validator: (value) => value == null ? 'Seleccione una categoría' : null,
-              ),
-              DropdownButtonFormField<Marca>(
-                value: selectedMarca,
-                items: marcas.map((mar) {
-                  return DropdownMenuItem(value: mar, child: Text(mar.nombre));
-                }).toList(),
-                onChanged: (value) => setState(() => selectedMarca = value),
-                decoration: const InputDecoration(labelText: 'Marca'),
-                validator: (value) => value == null ? 'Seleccione una marca' : null,
-              ),
-              DropdownButtonFormField<UnidadMedida>(
-                value: selectedUnidad,
-                items: unidades.map((um) {
-                  return DropdownMenuItem(value: um, child: Text(um.nombreMedida));
-                }).toList(),
-                onChanged: (value) => setState(() => selectedUnidad = value),
-                decoration: const InputDecoration(labelText: 'Unidad de Medida'),
-                validator: (value) => value == null ? 'Seleccione una unidad' : null,
-              ),
-              const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.pop(context, true);
-                  },
-                  child: const Text('Cancelar'),
-                ),
-                ElevatedButton(
-                  onPressed: _registrarProducto,
-                  child: const Text('Guardar'),
-                )
-              ],
-            )
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        }else{
+          return Center(child: CircularProgressIndicator(),);
+        }
+      }),
     );
   }
 
@@ -168,14 +156,8 @@ class _ProductoFormState extends State<ProductoFormB> {
         marca: selectedMarca!.idMarca,
         unidadMedida: selectedUnidad!.idUnidad,
       );
-      var api = await Provider.of<ProductoApi>( context, listen: false)
-          .crearProducto(TokenUtil.TOKEN,producto);
-
-      if (api.toJson()!=null) {
-        Navigator.pop(context, () {setState(() {}); });
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => NavigationHomeScreen()));
-      }
-      print(producto.toJson());
+      BlocProvider.of<ProductoBloc>(context).add(CreateProductoEvent(producto));
+      Navigator.pop(context, () {setState(() {}); });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Producto registrado exitosamente')),

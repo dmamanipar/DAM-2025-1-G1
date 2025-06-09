@@ -17,6 +17,7 @@ import 'package:sysventas/repository/UnidadMedidaRepository.dart';
 import 'package:sysventas/theme/AppTheme.dart';
 import 'package:sysventas/ui/producto/producto_edit.dart';
 import 'package:sysventas/ui/producto/producto_form.dart';
+import 'package:sysventas/ui/productob/producto_form.dart';
 import 'package:sysventas/util/TokenUtil.dart';
 import '../help_screen.dart';
 import 'package:excel/excel.dart';
@@ -116,7 +117,7 @@ class _ProductoUIState extends State<ProductoUI> {
                   print("Si funciona 2");
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProductoForm()),
+                    MaterialPageRoute(builder: (context) => ProductoFormB()),
                   ).then(onGoBack);
                 },
                 child: Icon(Icons.add_box_sharp),
