@@ -1,11 +1,19 @@
+import 'package:floor/floor.dart';
+
+@Entity(tableName: 'unidadmedida')
 class UnidadMedida {
+  @PrimaryKey(autoGenerate: false)
+  @ColumnInfo(name: 'id_unidad')
+  late final int idUnidad;
+  @ColumnInfo(name: 'nombre_medida')
+  late final String nombreMedida;
+
   UnidadMedida({
     required this.idUnidad,
     required this.nombreMedida,
   });
 
-  late final int idUnidad;
-  late final String nombreMedida;
+
 
   UnidadMedida.crear():idUnidad=0, nombreMedida="";
 

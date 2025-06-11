@@ -1,8 +1,21 @@
+import 'package:floor/floor.dart';
 import 'package:sysventas/modelo/CategoriaModelo.dart';
 import 'package:sysventas/modelo/MarcaModelo.dart';
 import 'package:sysventas/modelo/UnidadMedidaModelo.dart';
 
+
 class ProductoResp {
+  final int idProducto;
+  final String nombre;
+  final double pu;
+  final double puOld;
+  final double utilidad;
+  final double stock;
+  final double stockOld;
+  final Categoria categoria;
+  final Marca marca;
+  final UnidadMedida unidadMedida;
+
   ProductoResp({
     required this.idProducto,
     required this.nombre,
@@ -16,16 +29,7 @@ class ProductoResp {
     required this.unidadMedida,
   });
 
-  final int idProducto;
-  final String nombre;
-  final double pu;
-  final double puOld;
-  final double utilidad;
-  final double stock;
-  final double stockOld;
-  final Categoria categoria;
-  final Marca marca;
-  final UnidadMedida unidadMedida;
+
 
   factory ProductoResp.fromJson(Map<String, dynamic> json){
     return ProductoResp(
@@ -55,8 +59,9 @@ class ProductoResp {
     "unidadMedida": unidadMedida?.toJson(),
   };
 
-}
 
+}
+@Entity(tableName: 'producto')
 class ProductoDto {
   ProductoDto({
     required this.idProducto,
@@ -70,16 +75,20 @@ class ProductoDto {
     required this.marca,
     required this.unidadMedida,
   });
-
-  late final int idProducto;
+  @PrimaryKey(autoGenerate: false)
+  @ColumnInfo(name: 'id_producto')
+  late int idProducto;
   late final String nombre;
   late final double pu;
+  @ColumnInfo(name: 'pu_old')
   late final double puOld;
   late final double utilidad;
   late final double stock;
+  @ColumnInfo(name: 'stock_old')
   late final double stockOld;
   late final int categoria;
   late final int marca;
+
   late final int unidadMedida;
 
   ProductoDto.unlaunched();

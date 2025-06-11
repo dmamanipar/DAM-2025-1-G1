@@ -14,7 +14,7 @@ class _ProductoApi implements ProductoApi {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://172.22.2.50:8080';
+    baseUrl ??= 'http://192.168.1.39:8080';
   }
 
   final Dio _dio;
@@ -172,7 +172,7 @@ class _ProductoApi implements ProductoApi {
   }
 
   @override
-  Future<ProductoResp> updateProducto(
+  Future<ProductoDto> updateProducto(
     String token,
     int id,
     ProductoDto producto,
@@ -183,7 +183,7 @@ class _ProductoApi implements ProductoApi {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(producto.toJson());
-    final _options = _setStreamType<ProductoResp>(Options(
+    final _options = _setStreamType<ProductoDto>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
@@ -200,9 +200,9 @@ class _ProductoApi implements ProductoApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ProductoResp _value;
+    late ProductoDto _value;
     try {
-      _value = ProductoResp.fromJson(_result.data!);
+      _value = ProductoDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

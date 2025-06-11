@@ -1,11 +1,18 @@
+import 'package:floor/floor.dart';
+
+@Entity(tableName: 'categoria')
 class Categoria {
+  @PrimaryKey(autoGenerate: false)
+  @ColumnInfo(name: 'id_categoria')
+  late final int idCategoria;
+  late final String nombre;
+
   Categoria({
     required this.idCategoria,
     required this.nombre,
   });
 
-  late final int idCategoria;
-  late final String nombre;
+
 
   Categoria.crear():idCategoria=0, nombre="";
 

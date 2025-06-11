@@ -1,17 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:sysventas/apis/categoria_api.dart';
-import 'package:sysventas/apis/marca_api.dart';
-import 'package:sysventas/apis/producto_api.dart';
-import 'package:sysventas/apis/unidadmedida_api.dart';
 import 'package:sysventas/bloc/producto/producto_bloc.dart';
 import 'package:sysventas/modelo/CategoriaModelo.dart';
 import 'package:sysventas/modelo/MarcaModelo.dart';
 import 'package:sysventas/modelo/ProductoModelo.dart';
 import 'package:sysventas/modelo/UnidadMedidaModelo.dart';
-import 'package:sysventas/util/TokenUtil.dart';
 
 class ProductoFormB extends StatefulWidget {
   const ProductoFormB({super.key});
@@ -144,7 +138,7 @@ class _ProductoFormState extends State<ProductoFormB> {
 
   void _registrarProducto() async{
     if (_formKey.currentState!.validate()) {
-      final producto = ProductoDto(
+       var producto = ProductoDto(
         idProducto: 0, // o generado por backend
         nombre: nombreController.text,
         pu: double.parse(puController.text),
@@ -156,6 +150,7 @@ class _ProductoFormState extends State<ProductoFormB> {
         marca: selectedMarca!.idMarca,
         unidadMedida: selectedUnidad!.idUnidad,
       );
+
       BlocProvider.of<ProductoBloc>(context).add(CreateProductoEvent(producto));
       Navigator.pop(context, () {setState(() {}); });
 

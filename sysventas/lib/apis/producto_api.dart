@@ -32,5 +32,5 @@ abstract class ProductoApi{
   Future<Message> deleteProducto(@Header("Authorization") String token, @Path("id") int id );
 
   @PUT("/productos/{id}")
-  Future<ProductoResp> updateProducto(@Header("Authorization") String token, @Path("id") int id, @Body() ProductoDto producto);
+  Future<ProductoDto> updateProducto(@Header("Authorization") String token, @Path("id") int id, @Body() ProductoDto producto);
 }
