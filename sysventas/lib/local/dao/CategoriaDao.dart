@@ -1,5 +1,6 @@
 import 'package:sysventas/modelo/CategoriaModelo.dart';
 import 'package:floor/floor.dart';
+
 @dao
 abstract class CategoriaDao {
   @Query('SELECT * FROM categoria')

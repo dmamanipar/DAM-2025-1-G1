@@ -41,6 +41,7 @@ class ProductoRepository with ConexionDBL{
       }
       var datoM = await marcaApi!.getMarca(TokenUtil.TOKEN);
       await marcaDao!.insertAllEntidad(datoM);
+
       var datoU = await unidadmedidaApi!.getUnidadMedida(TokenUtil.TOKEN);
       await unidadMedidaDao!.insertAllEntidad(datoU);
 

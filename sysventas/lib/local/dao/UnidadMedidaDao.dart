@@ -4,6 +4,7 @@ import 'package:floor/floor.dart';
 abstract class UnidadMedidaDao {
   @Query('SELECT * FROM unidadmedida')
   Future<List<UnidadMedida>> findAllEntidad();
+
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertAllEntidad(List<UnidadMedida> todo);
 
